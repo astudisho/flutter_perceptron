@@ -5,11 +5,12 @@ import 'package:flutter_chart/sizeUtil.dart';
 class VectorDetector extends StatefulWidget {
   final VectorPainter customPainter;
   final ClaseEnum selectedClase;
+  final Function(List<Vector> lista) onVectorListChange;
 
   @override
   _VectorDetectorState createState() => _VectorDetectorState();
 
-  const VectorDetector({this.customPainter, this.selectedClase});
+  const VectorDetector({this.customPainter, this.selectedClase, this.onVectorListChange});
 }
 
 class _VectorDetectorState extends State<VectorDetector> {
@@ -21,15 +22,11 @@ class _VectorDetectorState extends State<VectorDetector> {
       width: SizeUtil.width,
       height: SizeUtil.height,
       child: GestureDetector(
-        // child: Container(
-        //   width: SizeUtil.width,
-        //   height: SizeUtil.height,
         child: CustomPaint(
           painter: VectorPainter(
             listaPuntos: listVectores,
           ),
         ),
-        // ),
         onTapUp: (details) => addVector(details),
       ),
     );
@@ -44,6 +41,7 @@ class _VectorDetectorState extends State<VectorDetector> {
 
     setState(() {
       listVectores.add(newVector);
+      widget.onVectorListChange(listVectores);
     });
   }
 

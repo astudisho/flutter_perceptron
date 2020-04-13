@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chart/Perceptron/Perceptron.dart';
 import 'package:flutter_chart/VectorPainter.dart';
 import 'package:flutter_chart/sizeUtil.dart';
 import 'package:flutter_chart/vectorDetector.dart';
@@ -7,12 +8,7 @@ void main() {
   runApp(PerceptronApp());
 }
 
-class PerceptronApp extends StatefulWidget {
-  @override
-  _PerceptronAppState createState() => _PerceptronAppState();
-}
-
-class _PerceptronAppState extends State<PerceptronApp> {
+class PerceptronApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(title: "Perceptron app", home: StateHomePage());
@@ -26,12 +22,23 @@ class StateHomePage extends StatefulWidget {
 
 class _StateHomePageState extends State<StateHomePage> {
   ClaseEnum selectedClase = ClaseEnum.red;
+  bool isEnabledFloatingButton = true;
+  final Icon enabledFloatingButton = Icon(Icons.android);
+  final Icon disabledFloatingButton = Icon(Icons.timer);
+  List<Vector> listaVectores;
+  Perceptron perceptron;
+
   @override
   Widget build(BuildContext context) {
     SizeUtil.size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: getAppBar(),
       body: getBody(),
+      floatingActionButton: FloatingActionButton(
+        child: isEnabledFloatingButton ? enabledFloatingButton : disabledFloatingButton,
+        onPressed: isEnabledFloatingButton ? () => startTrainning() : null,
+        disabledElevation: 15,        
+        ),
     );
   }
 
@@ -64,7 +71,26 @@ class _StateHomePageState extends State<StateHomePage> {
     return VectorDetector(
       customPainter: VectorPainter(),
       selectedClase: selectedClase,
+      onVectorListChange: (lista) {
+        setState(() {
+          listaVectores = lista;
+        });
+      },
     );
+  }
+
+  void startTrainning() async{
+    setState(() {
+      isEnabledFloatingButton = false;
+    });
+
+    perceptron = new Perceptron(vectores: listaVectores);
+
+    await perceptron.entrenar();
+
+    setState(() {
+      isEnabledFloatingButton = true;
+    });
   }
 
   void onSelectColor(ClaseEnum clase) {
