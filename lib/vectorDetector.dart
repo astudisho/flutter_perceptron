@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chart/Perceptron/CoordenadasLinea.dart';
 import 'package:flutter_chart/VectorPainter.dart';
 import 'package:flutter_chart/sizeUtil.dart';
 
@@ -6,15 +7,17 @@ class VectorDetector extends StatefulWidget {
   final VectorPainter customPainter;
   final ClaseEnum selectedClase;
   final Function(List<Vector> lista) onVectorListChange;
+  final List<CoordenadasLinea> listaLineas;
 
   @override
   _VectorDetectorState createState() => _VectorDetectorState();
 
-  const VectorDetector({this.customPainter, this.selectedClase, this.onVectorListChange});
+  const VectorDetector({this.customPainter, this.selectedClase, this.listaLineas ,this.onVectorListChange});
 }
 
 class _VectorDetectorState extends State<VectorDetector> {
   List<Vector> listVectores = List<Vector>();
+  List<CoordenadasLinea> listaLineas;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +28,7 @@ class _VectorDetectorState extends State<VectorDetector> {
         child: CustomPaint(
           painter: VectorPainter(
             listaPuntos: listVectores,
+            listaLineas: widget.listaLineas,
           ),
         ),
         onTapUp: (details) => addVector(details),

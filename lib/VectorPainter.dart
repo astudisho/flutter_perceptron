@@ -3,12 +3,20 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_chart/Perceptron/CoordenadasLinea.dart';
 import 'package:flutter_chart/sizeUtil.dart';
 import 'package:flutter_chart/vectorDetector.dart';
 
 class VectorPainter extends CustomPainter {
+  VectorPainter({this.listaPuntos, this.listaLineas});
+
   List<Vector> listaPuntos = <Vector>[];
-  VectorPainter({this.listaPuntos});
+  List<CoordenadasLinea> listaLineas = <CoordenadasLinea>[];
+
+  Paint paintLinea = Paint()
+  ..color = Colors.green
+  ..strokeWidth = 1
+  ..strokeCap = StrokeCap.butt;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -32,6 +40,13 @@ class VectorPainter extends CustomPainter {
     if( listaRoja != null) {
       paint.color = Colors.red;
       canvas.drawPoints(PointMode.points, listaRoja , paint);
+    }
+
+    if(listaLineas != null && listaLineas.length > 0){
+
+      listaLineas.forEach((linea) { 
+        canvas.drawLine(linea.inicioLinea, linea.finLinea, paint);
+      });
     }
 
     canvas.restore();

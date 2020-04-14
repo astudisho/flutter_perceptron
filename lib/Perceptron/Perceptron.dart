@@ -8,9 +8,9 @@ class Perceptron{
 
   final List<Vector> vectores;  
 
-  Entrada entradaX = Entrada(valor: PerceptronUtil.getRandom( PerceptronUtil.getMaxX()));
-  Entrada entradaY = Entrada(valor: PerceptronUtil.getRandom( PerceptronUtil.getMaxY()));
-  Entrada _w0 = Entrada(valor: PerceptronUtil.getRandom(PerceptronUtil.getMaxMin()));  
+  Entrada entradaX = Entrada(valor: PerceptronUtil.getRandom( PerceptronUtil.maxX));
+  Entrada entradaY = Entrada(valor: PerceptronUtil.getRandom( PerceptronUtil.maxY));
+  Entrada w0 = Entrada(valor: PerceptronUtil.getRandom(PerceptronUtil.maxMin));  
 
   bool tieneError = false;
   num epoca = 0;
@@ -29,15 +29,17 @@ class Perceptron{
       if(esError){
         tieneError = true;
         
-        _w0.valor = _w0.valor + PerceptronUtil.errorRate * PerceptronUtil.getX0();       
+        w0.valor = w0.valor + PerceptronUtil.errorRate * PerceptronUtil.x0;
         entradaX.valor = entradaX.valor + PerceptronUtil.learningRate * PerceptronUtil.errorRate + vector.xPos;
         entradaY.valor = entradaY.valor + PerceptronUtil.learningRate * PerceptronUtil.errorRate + vector.yPos;
       }
     });
+    epoca++;
+    print("Epoca: $epoca");
   }
 
   ClaseEnum respuesta(Vector vector){
-    var suma = PerceptronUtil.getX0() * _w0.valor;
+    var suma = PerceptronUtil.x0 * w0.valor;
 
     suma += (vector.xPos * entradaX.valor) + vector.yPos * entradaY.valor;
 
@@ -45,3 +47,5 @@ class Perceptron{
     return result;
   }
 }
+
+// (w0 / entradaY) - ((entradaX / entradaY ))

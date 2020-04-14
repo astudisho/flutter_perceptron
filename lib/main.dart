@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chart/Perceptron/CoordenadasLinea.dart';
 import 'package:flutter_chart/Perceptron/Perceptron.dart';
+import 'package:flutter_chart/Perceptron/PlotFormatterService.dart';
 import 'package:flutter_chart/VectorPainter.dart';
 import 'package:flutter_chart/sizeUtil.dart';
 import 'package:flutter_chart/vectorDetector.dart';
+
+import 'Perceptron/perceptronUtil.dart';
 
 void main() {
   runApp(PerceptronApp());
@@ -26,6 +30,7 @@ class _StateHomePageState extends State<StateHomePage> {
   final Icon enabledFloatingButton = Icon(Icons.android);
   final Icon disabledFloatingButton = Icon(Icons.timer);
   List<Vector> listaVectores;
+  List<CoordenadasLinea> listaLineas = <CoordenadasLinea>[];
   Perceptron perceptron;
 
   @override
@@ -71,6 +76,7 @@ class _StateHomePageState extends State<StateHomePage> {
     return VectorDetector(
       customPainter: VectorPainter(),
       selectedClase: selectedClase,
+      listaLineas: listaLineas,
       onVectorListChange: (lista) {
         setState(() {
           listaVectores = lista;
@@ -88,7 +94,13 @@ class _StateHomePageState extends State<StateHomePage> {
 
     await perceptron.entrenar();
 
+    var plotService = PlotFormatterService();
+
+    //var linea = plotService.plotWeights2D([perceptron.entradaX, perceptron.entradaY], perceptron.w, )
+    var linea = plotService.plotWeights2D([perceptron.entradaX, perceptron.entradaY], perceptron.w0, PerceptronUtil.maxX, PerceptronUtil.minX);    
+
     setState(() {
+      listaLineas = <CoordenadasLinea>[linea];
       isEnabledFloatingButton = true;
     });
   }

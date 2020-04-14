@@ -10,14 +10,14 @@ class PerceptronUtil{
     return result;
   }
 
-  static num learningRate = 0.1;
+  static num learningRate = maxMin * 0.01;
   static num errorRate = 0.1;
-  static num maxEpocas = 500;
+  static num maxEpocas = 1500;
 
-  static double getMaxX() => SizeUtil.width;
-  static double getMinX() => 0;
-  static double getMaxY() => SizeUtil.height;
-  static double getMinY() => 0;
-  static double getX0() => -1;  
-  static get getMaxMin => getMaxX() < getMaxY() ? getMaxX() : getMaxY();
+  static double get maxX => SizeUtil.width;
+  static double get minX => 0;
+  static double get maxY => SizeUtil.height;
+  static double get minY => 0;
+  static double get x0 => -1;  
+  static get maxMin => maxX < maxY ? maxX : maxY;
 }
