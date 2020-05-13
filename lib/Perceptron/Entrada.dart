@@ -1,5 +1,5 @@
 class Entrada {
   num valor;
 
-  Entrada({this.valor});
+  Entrada(this.valor);
 }

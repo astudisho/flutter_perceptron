@@ -40,10 +40,12 @@ class _StateHomePageState extends State<StateHomePage> {
       appBar: getAppBar(),
       body: getBody(),
       floatingActionButton: FloatingActionButton(
-        child: isEnabledFloatingButton ? enabledFloatingButton : disabledFloatingButton,
+        child: isEnabledFloatingButton
+            ? enabledFloatingButton
+            : disabledFloatingButton,
         onPressed: isEnabledFloatingButton ? () => startTrainning() : null,
-        disabledElevation: 15,        
-        ),
+        disabledElevation: 15,
+      ),
     );
   }
 
@@ -85,22 +87,41 @@ class _StateHomePageState extends State<StateHomePage> {
     );
   }
 
-  void startTrainning() async{
+  void startTrainning() async {
     setState(() {
       isEnabledFloatingButton = false;
     });
-
-    perceptron = new Perceptron(vectores: listaVectores);
-
-    await perceptron.entrenar();
-
     var plotService = PlotFormatterService();
 
+    perceptron = new Perceptron(listaVectores);
+
+    do {
+      await perceptron.correrEpoca();
+      var linea = plotService.plotWeights2D(
+          [perceptron.entradaX, perceptron.entradaY],
+          perceptron.w0,
+          PerceptronUtil.maxX,
+          PerceptronUtil.minX);
+      listaLineas.add(linea);
+      setState(() {
+        listaLineas = listaLineas;
+      });
+    } while (
+        perceptron.epoca < PerceptronUtil.maxEpocas && perceptron.tieneError);
+
+    //await perceptron.entrenar();
+
     //var linea = plotService.plotWeights2D([perceptron.entradaX, perceptron.entradaY], perceptron.w, )
-    var linea = plotService.plotWeights2D([perceptron.entradaX, perceptron.entradaY], perceptron.w0, PerceptronUtil.maxX, PerceptronUtil.minX);    
+    var linea = plotService.plotWeights2D(
+        [perceptron.entradaX, perceptron.entradaY],
+        perceptron.w0,
+        PerceptronUtil.maxX,
+        PerceptronUtil.minX);
+
+    listaLineas.add(linea);
 
     setState(() {
-      listaLineas = <CoordenadasLinea>[linea];
+      listaLineas = listaLineas;
       isEnabledFloatingButton = true;
     });
   }

@@ -10,9 +10,8 @@ class PerceptronUtil{
     return result;
   }
 
-  static num learningRate = maxMin * 0.01;
-  static num errorRate = 0.1;
-  static num maxEpocas = 1500;
+  static num learningRate = 0.1;
+  static num maxEpocas = 2500;
 
   static double get maxX => SizeUtil.width;
   static double get minX => 0;

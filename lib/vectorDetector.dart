@@ -38,15 +38,20 @@ class _VectorDetectorState extends State<VectorDetector> {
 
   void addVector(TapUpDetails details) {
     var newVector = Vector(
-      xPos: details.localPosition.dx,
-      yPos: details.localPosition.dy,
-      clase: widget.selectedClase,
+      details.localPosition.dx,
+      details.localPosition.dy,
+      widget.selectedClase,
     );
 
     setState(() {
       listVectores.add(newVector);
       widget.onVectorListChange(listVectores);
     });
+  }
+
+  num getNumClase(ClaseEnum clase){
+    var result = clase == ClaseEnum.red ? 0 : 1;
+    return result;
   }
 
   Color getColor(ClaseEnum clase) {
@@ -68,11 +73,29 @@ class Vector {
   num yPos;
   ClaseEnum clase;
 
-  Vector({this.xPos, this.yPos, this.clase});
+  Vector(this.xPos, this.yPos, this.clase);
 
   @override
   String toString() {
     return "x: $xPos y: $yPos clase: ${clase.toString()}";
+  }
+
+  static Color _getColor(ClaseEnum clase) {
+    switch (clase) {
+      case ClaseEnum.blue:
+        return Colors.blue;
+      case ClaseEnum.red:
+        return Colors.red;
+      case ClaseEnum.green:
+        return Colors.green;
+      default:
+        return Colors.red;
+    }
+  }
+
+  Color getColor(){
+    var result = Vector._getColor(this.clase);
+    return result;
   }
 }
 
